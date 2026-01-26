@@ -472,6 +472,12 @@
                         setTimeout(function () { cartBadge.style.animation = ''; }, 300);
                     }
                     showNotification(data.message);
+                } else if (data.login_required) {
+                    // User needs to login - redirect to login page
+                    showNotification(data.message, 'error');
+                    setTimeout(function () {
+                        window.location.href = data.redirect_url + '?next=' + encodeURIComponent(window.location.pathname);
+                    }, 1500);
                 } else {
                     showNotification('Error: ' + data.message, 'error');
                 }

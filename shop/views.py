@@ -172,7 +172,16 @@ def cart_view(request):
 
 @require_POST
 def add_to_cart(request):
-    """Add product to cart"""
+    """Add product to cart - requires login"""
+    # Check if user is logged in
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'success': False,
+            'login_required': True,
+            'message': 'Please login to add items to cart',
+            'redirect_url': '/login/'
+        }, status=401)
+    
     try:
         data = json.loads(request.body)
         product_id = str(data.get('product_id'))
@@ -200,7 +209,16 @@ def add_to_cart(request):
 
 @require_POST
 def update_cart(request):
-    """Update cart item quantity"""
+    """Update cart item quantity - requires login"""
+    # Check if user is logged in
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'success': False,
+            'login_required': True,
+            'message': 'Please login to update cart',
+            'redirect_url': '/login/'
+        }, status=401)
+    
     try:
         data = json.loads(request.body)
         product_id = str(data.get('product_id'))
@@ -227,7 +245,16 @@ def update_cart(request):
 
 @require_POST
 def remove_from_cart(request):
-    """Remove item from cart"""
+    """Remove item from cart - requires login"""
+    # Check if user is logged in
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'success': False,
+            'login_required': True,
+            'message': 'Please login to modify cart',
+            'redirect_url': '/login/'
+        }, status=401)
+    
     try:
         data = json.loads(request.body)
         product_id = str(data.get('product_id'))
