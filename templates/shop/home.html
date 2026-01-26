@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- ===== HERO SECTION ===== -->
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-left">
+            <div class="new-badge">
+                <span class="dot"></span>
+                New Arrivals
+            </div>
+            <h1 class="hero-title">
+                Curated Gifts that <span class="emoji">🎁</span><span class="emoji">✨</span> Speak to the Soul
+            </h1>
+            <p class="hero-subtitle">
+                Discover thoughtfully curated gifts for every occasion. From birthdays to anniversaries, we help you
+                find the perfect way to express your love.
+            </p>
+            <div class="hero-buttons">
+                <a href="https://wa.me/{{ whatsapp_number|slice:'1:' }}?text=Hi%20GiftWorld!%20I%20would%20like%20to%20enquire%20about%20your%20gifts."
+                    target="_blank" class="btn btn-primary"><i class="fab fa-whatsapp"></i> Enquire Now</a>
+                <a href="{% url 'shop:shop' %}" class="btn btn-outline">View Collections</a>
+            </div>
+
+            {% if featured_products %}
+            <a href="{% url 'shop:product_detail' featured_products.0.slug %}" class="hero-featured-card">
+                {% if featured_products.0.image %}
+                <img src="{{ featured_products.0.image.url }}" alt="{{ featured_products.0.name }}"
+                    class="featured-card-img">
+                {% else %}
+                <img src="https://i.postimg.cc/VsFY6ctr/gift-box-1.jpg" alt="Premium Gift Box"
+                    class="featured-card-img">
+                {% endif %}
+                <div class="featured-card-content">
+                    <h4>{{ featured_products.0.name|default:"Premium Gift Box" }}</h4>
+                    <p>{{ featured_products.0.short_description|default:"Handcrafted with love" }}</p>
+                </div>
+                <span class="featured-card-btn">
+                    <i class="fas fa-arrow-right"></i>
+                </span>
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="hero-center">
+            <div class="hero-image-container">
+                <img src="https://i.postimg.cc/T3BxS28v/hero-person.jpg" alt="Gift Shop Owner" class="hero-main-image">
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="style-badge">
+                <i class="fas fa-star" style="color: var(--gold);"></i>
+                NEWEST GIFT STYLE
+            </div>
+
+            <div class="hero-right-card">
+                <img src="https://i.postimg.cc/pr0bBRQw/curated-gifts.jpg" alt="Curated Gifts" class="hero-right-image">
+                <div class="hero-right-content">
+                    <h4>Crafting by Love</h4>
+                    <p>Each gift is handpicked and wrapped with care to create unforgettable moments.</p>
+                </div>
+                <div class="hero-right-btn">
+                    <a href="{% url 'shop:shop' %}" class="btn-icon">
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FEATURED SECTION ===== -->
+<section class="featured">
+    <div class="featured-inner">
+        <div class="stats-card">
+            <p class="stats-label">Happy Customers</p>
+            <p class="stats-number">500+</p>
+            <p class="stats-text">Happy customers served</p>
+            <div class="stats-images">
+                <img src="https://i.postimg.cc/D0wR0RVx/customer-1.jpg" alt="Customer" class="stats-img">
+                <img src="https://i.postimg.cc/D0wR0RVx/customer-1.jpg" alt="Customer" class="stats-img">
+                <img src="https://i.postimg.cc/D0wR0RVx/customer-1.jpg" alt="Customer" class="stats-img">
+            </div>
+        </div>
+
+        <div class="featured-products">
+            {% for product in featured_products|slice:":2" %}
+            <a href="{% url 'shop:product_detail' product.slug %}" class="featured-product-card">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="featured-product-img">
+                {% else %}
+                <img src="https://i.postimg.cc/pLbk130S/product-featured-1.jpg" alt="{{ product.name }}"
+                    class="featured-product-img">
+                {% endif %}
+                <p class="featured-product-name">{{ product.name }}</p>
+            </a>
+            {% empty %}
+            <a href="#" class="featured-product-card">
+                <img src="https://i.postimg.cc/pLbk130S/product-featured-1.jpg" alt="Luxury Hamper"
+                    class="featured-product-img">
+                <p class="featured-product-name">Luxury Hamper</p>
+            </a>
+            <a href="#" class="featured-product-card">
+                <img src="https://i.postimg.cc/BvNgbbq3/product-featured-2.jpg" alt="Celebration Box"
+                    class="featured-product-img">
+                <p class="featured-product-name">Celebration Box</p>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="featured-content">
+            <h2>Hand picked for your heart picked person</h2>
+            <p>If you're stuck thinking what to buy someone, don't worry—GiftWorld is here to help you find the
+                perfect surprise.</p>
+            <a href="{% url 'shop:shop' %}" class="btn btn-primary"><i class="fas fa-gift"></i> Explore Gifts</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== PRODUCTS SECTION ===== -->
+<section class="products">
+    <div class="products-header">
+        <h2>Enquire with Confidence</h2>
+        <div class="products-filters">
+            <a href="{% url 'shop:shop' %}" class="filter-btn active">All Gifts</a>
+            <a href="{% url 'shop:shop' %}?badge=BESTSELLER" class="filter-btn">Bestsellers</a>
+        </div>
+        <div class="products-nav">
+            <button class="nav-btn"><i class="fas fa-chevron-left"></i></button>
+            <button class="nav-btn"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <div class="products-grid" id="products">
+        {% for product in featured_products %}
+        <a href="{% url 'shop:product_detail' product.slug %}" class="product-card">
+            {% if product.badge %}
+            <span class="product-badge">{{ product.get_badge_display }}</span>
+            {% endif %}
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            {% else %}
+            <img src="https://i.postimg.cc/L4Gr2CCR/product-1.jpg" alt="{{ product.name }}" class="product-image">
+            {% endif %}
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-price">₹{{ product.display_price }} <i class="fas fa-shopping-bag"></i></p>
+        </a>
+        {% empty %}
+        <!-- Default products if none in database -->
+        <a href="{% url 'shop:shop' %}" class="product-card">
+            <span class="product-badge">NEW</span>
+            <img src="https://i.postimg.cc/L4Gr2CCR/product-1.jpg" alt="Blush Bloom Box" class="product-image">
+            <h3 class="product-name">Blush Bloom</h3>
+            <p class="product-price">Tap to View <i class="fas fa-arrow-right"></i></p>
+        </a>
+        <a href="{% url 'shop:shop' %}" class="product-card">
+            <img src="https://i.postimg.cc/CxgXfZVw/product-2.jpg" alt="Dune Beige Collection" class="product-image">
+            <h3 class="product-name">Dune Beige</h3>
+            <p class="product-price">Tap to View <i class="fas fa-arrow-right"></i></p>
+        </a>
+        <a href="{% url 'shop:shop' %}" class="product-card">
+            <img src="https://i.postimg.cc/hj634v0r/product-3.jpg" alt="Peony Roses Set" class="product-image">
+            <h3 class="product-name">Peony Roses</h3>
+            <p class="product-price">Tap to View <i class="fas fa-arrow-right"></i></p>
+        </a>
+        <a href="{% url 'shop:shop' %}" class="product-card">
+            <span class="product-badge">POPULAR</span>
+            <img src="https://i.postimg.cc/9Xwn8PmW/product-4.jpg" alt="Wild Whisper Gift" class="product-image">
+            <h3 class="product-name">Wild Whisper</h3>
+            <p class="product-price">Tap to View <i class="fas fa-arrow-right"></i></p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- ===== WHY CHOOSE US SECTION ===== -->
+<section class="why-choose">
+    <div class="why-choose-inner">
+        <div class="why-choose-content">
+            <h2>Why custom hand picked gifts?</h2>
+            <p>Each item is curated with love and care—we don't believe in generic gifts. Every selection is
+                thoughtfully chosen to create lasting memories.</p>
+
+            <ul class="features-list">
+                <li class="feature-item">
+                    <span class="feature-icon"><i class="fas fa-check"></i></span>
+                    Premium quality products
+                </li>
+                <li class="feature-item">
+                    <span class="feature-icon"><i class="fas fa-check"></i></span>
+                    Handcrafted packaging
+                </li>
+                <li class="feature-item">
+                    <span class="feature-icon"><i class="fas fa-check"></i></span>
+                    Secure online payment
+                </li>
+                <li class="feature-item">
+                    <span class="feature-icon"><i class="fas fa-check"></i></span>
+                    Fast delivery in Purnea
+                </li>
+            </ul>
+
+            <a href="{% url 'shop:shop' %}" class="btn btn-primary"><i class="fas fa-gift"></i> Shop Now</a>
+        </div>
+
+        <div class="why-choose-images">
+            <div class="why-image-card">
+                <img src="https://i.postimg.cc/W3FXyjPY/why-1.jpg" alt="Gift Selection">
+            </div>
+            <div class="why-image-card">
+                <img src="https://i.postimg.cc/9FjJLvgR/why-2.jpg" alt="Gift Packaging">
+                {% if testimonials %}
+                <div class="testimonial-overlay">
+                    <p>"{{ testimonials.0.content|truncatewords:20 }}"</p>
+                    <span class="author">— {{ testimonials.0.customer_name }}</span>
+                </div>
+                {% else %}
+                <div class="testimonial-overlay">
+                    <p>"Absolutely beautiful presentation—you can feel the love in every detail."</p>
+                    <span class="author">— Sarah M.</span>
+                </div>
+                {% endif %}
+            </div>
+            <div class="why-image-card large">
+                <img src="https://i.postimg.cc/rwfjFzVj/why-3.jpg" alt="Happy Customer">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== MEMORIES SECTION ===== -->
+<section class="memories">
+    <div class="memories-inner">
+        <div class="memories-left">
+            <div class="memories-badge">
+                <i class="fas fa-gift"></i> Elegant Gifts that speak to the soul
+            </div>
+            <h3>Creating moments that last forever</h3>
+            <p class="stats-large">5K+</p>
+            <p class="stats-large-text">Happy customers in Purnea</p>
+        </div>
+
+        <div class="memories-center">
+            <div class="memories-card">
+                {% if testimonials and testimonials|length > 1 %}
+                <div class="memories-card-header">
+                    {% if testimonials.1.customer_image %}
+                    <img src="{{ testimonials.1.customer_image.url }}" alt="{{ testimonials.1.customer_name }}"
+                        class="memories-card-avatar">
+                    {% else %}
+                    <img src="https://i.postimg.cc/V6nXMNwY/customer-review.jpg" alt="Customer"
+                        class="memories-card-avatar">
+                    {% endif %}
+                    <div class="memories-card-info">
+                        <h4>{{ testimonials.1.customer_name }}</h4>
+                        <p>Verified Buyer</p>
+                    </div>
+                </div>
+                <span class="memories-card-tag">{{ testimonials.1.occasion|default:"Gift for Anniversary" }}</span>
+                <h3>Love at First Sight</h3>
+                <p>{{ testimonials.1.content|truncatewords:25 }}</p>
+                {% else %}
+                <div class="memories-card-header">
+                    <img src="https://i.postimg.cc/V6nXMNwY/customer-review.jpg" alt="Customer"
+                        class="memories-card-avatar">
+                    <div class="memories-card-info">
+                        <h4>Chris Kim</h4>
+                        <p>Verified Buyer</p>
+                    </div>
+                </div>
+                <span class="memories-card-tag">Gift for Anniversary</span>
+                <h3>Love at First Sight</h3>
+                <p>The gift arrived beautifully wrapped. My wife was so touched—it was the perfect anniversary
+                    surprise!</p>
+                {% endif %}
+                <a href="{% url 'shop:shop' %}" class="btn btn-primary btn-sm"><i class="fas fa-gift"></i> Shop Now</a>
+            </div>
+        </div>
+
+        <div class="memories-right">
+            <h2>Gifts recall the one you love</h2>
+            <img src="https://i.postimg.cc/QxXc9snP/heart-gift.jpg" alt="Heart Shaped Gift Arrangement"
+                class="memories-image">
+        </div>
+    </div>
+</section>
+
+<!-- ===== GIFTING SECTION ===== -->
+<section class="gifting">
+    <div class="gifting-inner">
+        <div class="gifting-left">
+            <h2>Gifting made effortless, by GiftWorld</h2>
+            <p>Just tell us your occasion and budget—we'll handle the rest. Premium gifts, beautiful packaging,
+                visit our store in Purnea.</p>
+            <a href="{% url 'shop:contact' %}" class="btn btn-primary"><i class="fas fa-envelope"></i> Contact Us</a>
+        </div>
+
+        <div class="gifting-center">
+            <span class="special-badge">Special Designer</span>
+            <img src="https://i.postimg.cc/HkNMhMsY/gift-designer.jpg" alt="Gift Designer" class="gifting-image">
+        </div>
+
+        <div class="gifting-right">
+            <div class="gift-tag">
+                <i class="fas fa-gift"></i>
+                Photo Frames
+            </div>
+            <p>Discover our new "Wrap with Love" collection—handcrafted gift arrangements.</p>
+            <div class="gift-items">
+                <img src="https://i.postimg.cc/nrn9DYTC/gift-item-1.jpg" alt="Gift Item" class="gift-item-img">
+                <img src="https://i.postimg.cc/DfcXKHyq/gift-item-2.jpg" alt="Gift Item" class="gift-item-img">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

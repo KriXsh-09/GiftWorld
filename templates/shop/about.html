@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - GiftWorld{% endblock %}
+{% block meta_description %}Learn about GiftWorld - your trusted gift shop in Purnea, Bihar. Curating thoughtful gifts
+since 2020.{% endblock %}
+
+{% block content %}
+<section class="about-page">
+    <div class="about-inner">
+        <!-- Hero Section -->
+        <div class="about-hero">
+            <div class="about-hero-content">
+                <h1>Our Story</h1>
+                <p>Crafting memories through carefully curated gifts since 2020</p>
+            </div>
+        </div>
+
+        <!-- About Content -->
+        <div class="about-content">
+            <div class="about-text">
+                <h2>Welcome to GiftWorld</h2>
+                <p>At GiftWorld, we believe that every gift tells a story. Founded in 2020 in the heart of Purnea,
+                    Bihar, we started with a simple mission: to help people express their love through thoughtfully
+                    curated gifts.</p>
+                <p>What began as a small passion project has grown into a beloved local destination for those seeking
+                    unique and meaningful presents. We handpick every item in our collection, ensuring that each gift
+                    carries a touch of love and care.</p>
+            </div>
+
+            <div class="about-image">
+                <img src="https://i.postimg.cc/HkNMhMsY/gift-designer.jpg" alt="Gift Designer at work">
+            </div>
+        </div>
+
+        <!-- Values Section -->
+        <div class="values-section">
+            <h2>Why Choose Us?</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Handpicked with Love</h3>
+                    <p>Every item is carefully selected to ensure quality and uniqueness.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3>Premium Packaging</h3>
+                    <p>Beautiful wrapping that makes the unboxing experience special.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick delivery across Purnea and surrounding areas.</p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>5000+ Happy Customers</h3>
+                    <p>Trusted by thousands of satisfied customers.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        {% if testimonials %}
+        <div class="testimonials-section">
+            <h2>What Our Customers Say</h2>
+            <div class="testimonials-grid">
+                {% for testimonial in testimonials %}
+                <div class="testimonial-card">
+                    <div class="testimonial-stars">
+                        {% for i in "12345" %}
+                        <i class="fas fa-star {% if forloop.counter > testimonial.rating %}text-muted{% endif %}"></i>
+                        {% endfor %}
+                    </div>
+                    <p class="testimonial-text">"{{ testimonial.content }}"</p>
+                    <div class="testimonial-author">
+                        {% if testimonial.customer_image %}
+                        <img src="{{ testimonial.customer_image.url }}" alt="{{ testimonial.customer_name }}">
+                        {% else %}
+                        <div class="author-initial">{{ testimonial.customer_name|slice:":1" }}</div>
+                        {% endif %}
+                        <div>
+                            <h4>{{ testimonial.customer_name }}</h4>
+                            <p>{{ testimonial.occasion }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- CTA Section -->
+        <div class="about-cta">
+            <h2>Ready to Find the Perfect Gift?</h2>
+            <p>Explore our collection or contact us for custom gift solutions.</p>
+            <div class="cta-buttons">
+                <a href="{% url 'shop:shop' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-gift"></i> Shop Now
+                </a>
+                <a href="{% url 'shop:contact' %}" class="btn btn-outline btn-lg">
+                    <i class="fas fa-envelope"></i> Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-page {
+        background: var(--cream);
+    }
+
+    .about-inner {
+        max-width: var(--container-max);
+        margin: 0 auto;
+    }
+
+    .about-hero {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        padding: 80px 5%;
+        text-align: center;
+        color: var(--white);
+    }
+
+    .about-hero h1 {
+        font-family: var(--font-heading);
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        margin-bottom: 16px;
+    }
+
+    .about-hero p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    .about-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        padding: 80px 5%;
+        align-items: center;
+    }
+
+    .about-text h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        color: var(--primary-dark);
+        margin-bottom: 24px;
+    }
+
+    .about-text p {
+        color: var(--text-muted);
+        line-height: 1.8;
+        margin-bottom: 16px;
+    }
+
+    .about-image img {
+        width: 100%;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .values-section {
+        padding: 60px 5% 80px;
+        text-align: center;
+    }
+
+    .values-section h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        color: var(--primary-dark);
+        margin-bottom: 40px;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+
+    .value-card {
+        background: var(--white);
+        padding: 40px 30px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        transition: var(--transition-medium);
+    }
+
+    .value-card:hover {
+        transform: translateY(-10px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .value-icon {
+        width: 70px;
+        height: 70px;
+        background: var(--secondary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+
+    .value-icon i {
+        font-size: 28px;
+        color: var(--primary-dark);
+    }
+
+    .value-card h3 {
+        font-family: var(--font-heading);
+        font-size: 1.2rem;
+        color: var(--primary-dark);
+        margin-bottom: 12px;
+    }
+
+    .value-card p {
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    .testimonials-section {
+        padding: 60px 5% 80px;
+        background: var(--white);
+    }
+
+    .testimonials-section h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        color: var(--primary-dark);
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+    }
+
+    .testimonial-card {
+        background: var(--cream);
+        padding: 30px;
+        border-radius: var(--radius-lg);
+    }
+
+    .testimonial-stars {
+        color: var(--gold);
+        margin-bottom: 16px;
+    }
+
+    .testimonial-text {
+        color: var(--text-dark);
+        font-style: italic;
+        line-height: 1.7;
+        margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .testimonial-author img,
+    .author-initial {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .author-initial {
+        background: var(--primary);
+        color: var(--white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .testimonial-author h4 {
+        font-size: 14px;
+        color: var(--primary-dark);
+        margin-bottom: 2px;
+    }
+
+    .testimonial-author p {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .about-cta {
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        padding: 80px 5%;
+        text-align: center;
+        color: var(--white);
+    }
+
+    .about-cta h2 {
+        font-family: var(--font-heading);
+        font-size: clamp(1.8rem, 3vw, 2.5rem);
+        margin-bottom: 16px;
+    }
+
+    .about-cta p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 30px;
+    }
+
+    .cta-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .about-cta .btn-primary {
+        background: var(--white);
+        color: var(--primary-dark);
+    }
+
+    .about-cta .btn-outline {
+        border-color: var(--white);
+        color: var(--white);
+    }
+
+    .about-cta .btn-outline:hover {
+        background: var(--white);
+        color: var(--primary-dark);
+    }
+
+    @media (max-width: 768px) {
+        .about-content {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

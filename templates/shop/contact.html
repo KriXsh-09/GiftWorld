@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us - GiftWorld{% endblock %}
+{% block meta_description %}Contact GiftWorld for custom gifts, enquiries, and orders. Visit our store in Purnea,
+Bihar.{% endblock %}
+
+{% block content %}
+<section class="contact-page">
+    <div class="contact-inner">
+        <div class="contact-header">
+            <h1>Get in Touch</h1>
+            <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+        </div>
+
+        <div class="contact-content">
+            <!-- Contact Form -->
+            <div class="contact-form-section">
+                <form method="post" action="{% url 'shop:contact' %}" class="contact-form">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number *</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="subject">Subject *</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Your Message *</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="contact-info-section">
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3>Visit Our Store</h3>
+                    <p>GiftWorld<br>Chitravani Road, Bhatta Bazar<br>Purnea, Bihar 854301</p>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3>Call Us</h3>
+                    <p><a href="tel:{{ whatsapp_number }}">{{ whatsapp_number }}</a></p>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-card-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Us</h3>
+                    <p><a href="mailto:giftworldonlineofficial@gmail.com">giftworldonlineofficial@gmail.com</a></p>
+                </div>
+
+                <div class="contact-card whatsapp">
+                    <div class="contact-card-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3>WhatsApp Us</h3>
+                    <p>Get instant response on WhatsApp</p>
+                    <a href="https://wa.me/{{ whatsapp_number|slice:'1:' }}?text=Hi%20GiftWorld!%20I%20would%20like%20to%20enquire."
+                        target="_blank" class="btn btn-primary btn-sm">
+                        <i class="fab fa-whatsapp"></i> Chat Now
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-page {
+        padding: 60px 5%;
+        background: var(--cream);
+        min-height: 70vh;
+    }
+
+    .contact-inner {
+        max-width: var(--container-max);
+        margin: 0 auto;
+    }
+
+    .contact-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .contact-header h1 {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 4vw, 3rem);
+        color: var(--primary-dark);
+        margin-bottom: 16px;
+    }
+
+    .contact-header p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .contact-content {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 60px;
+    }
+
+    .contact-form-section {
+        background: var(--white);
+        padding: 40px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-md);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: var(--text-dark);
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid #E0E0E0;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        transition: var(--transition-fast);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(169, 29, 58, 0.1);
+    }
+
+    .contact-info-section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .contact-card {
+        background: var(--white);
+        padding: 24px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .contact-card-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--secondary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+    .contact-card-icon i {
+        font-size: 20px;
+        color: var(--primary-dark);
+    }
+
+    .contact-card h3 {
+        font-family: var(--font-heading);
+        font-size: 1.1rem;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+
+    .contact-card p {
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .contact-card a {
+        color: var(--primary);
+    }
+
+    .contact-card.whatsapp {
+        background: linear-gradient(135deg, #25D366, #128C7E);
+        color: var(--white);
+    }
+
+    .contact-card.whatsapp .contact-card-icon {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .contact-card.whatsapp .contact-card-icon i {
+        color: var(--white);
+    }
+
+    .contact-card.whatsapp h3,
+    .contact-card.whatsapp p {
+        color: var(--white);
+    }
+
+    .contact-card.whatsapp .btn {
+        background: var(--white);
+        color: #128C7E;
+        margin-top: 12px;
+    }
+
+    @media (max-width: 992px) {
+        .contact-content {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+    }
+
+    @media (max-width: 576px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

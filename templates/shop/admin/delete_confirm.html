@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Product - GiftWorld Admin{% endblock %}
+
+{% block content %}
+<section class="admin-section">
+    <div class="admin-container">
+        <div class="delete-card">
+            <div class="delete-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h2>Delete Product</h2>
+            <p>Are you sure you want to delete <strong>"{{ product.name }}"</strong>?</p>
+            <p class="warning">This action cannot be undone.</p>
+
+            {% if product.image %}
+            <div class="product-preview">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+            {% endif %}
+
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <div class="form-actions">
+                    <a href="{% url 'shop:admin_dashboard' %}" class="btn-cancel">Cancel</a>
+                    <button type="submit" class="btn-delete">
+                        <i class="fas fa-trash"></i> Yes, Delete
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    .admin-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        padding: 40px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .admin-container {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .delete-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    }
+
+    .delete-icon {
+        width: 80px;
+        height: 80px;
+        background: #fff3cd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+    }
+
+    .delete-icon i {
+        font-size: 36px;
+        color: #856404;
+    }
+
+    .delete-card h2 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 12px;
+    }
+
+    .delete-card p {
+        color: #666;
+        margin-bottom: 8px;
+    }
+
+    .delete-card .warning {
+        color: #c62828;
+        font-weight: 500;
+        margin-bottom: 24px;
+    }
+
+    .product-preview {
+        margin: 20px 0;
+    }
+
+    .product-preview img {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 12px;
+        object-fit: cover;
+        border: 2px solid #eee;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 24px;
+    }
+
+    .btn-cancel {
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        color: #666;
+        background: #f5f5f5;
+        transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+        background: #e0e0e0;
+    }
+
+    .btn-delete {
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #b71c1c, #c62828);
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(198, 40, 40, 0.3);
+    }
+</style>
+{% endblock %}

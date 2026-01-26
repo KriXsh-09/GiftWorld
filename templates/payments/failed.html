@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Failed - GiftWorld{% endblock %}
+
+{% block content %}
+<section class="failed-page">
+    <div class="failed-inner">
+        <div class="failed-card">
+            <div class="failed-icon">
+                <i class="fas fa-times-circle"></i>
+            </div>
+
+            <h1>Payment Failed</h1>
+            <p>Unfortunately, your payment could not be processed. Don't worry, no amount has been deducted from your
+                account.</p>
+
+            <div class="failed-reasons">
+                <h3>Common reasons for payment failure:</h3>
+                <ul>
+                    <li><i class="fas fa-exclamation-triangle"></i> Insufficient funds in your account</li>
+                    <li><i class="fas fa-exclamation-triangle"></i> Network connectivity issues</li>
+                    <li><i class="fas fa-exclamation-triangle"></i> Bank server timeout</li>
+                    <li><i class="fas fa-exclamation-triangle"></i> Incorrect card/bank details</li>
+                </ul>
+            </div>
+
+            <div class="failed-actions">
+                <a href="{% url 'shop:checkout' %}" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> Try Again
+                </a>
+                <a href="https://wa.me/{{ whatsapp_number|slice:'1:' }}?text=Hi!%20I%20faced%20a%20payment%20issue%20while%20placing%20an%20order."
+                    target="_blank" class="btn btn-outline">
+                    <i class="fab fa-whatsapp"></i> Contact Support
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .failed-page {
+        padding: 80px 5%;
+        background: var(--cream);
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .failed-inner {
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .failed-card {
+        background: var(--white);
+        padding: 60px 40px;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-lg);
+        text-align: center;
+    }
+
+    .failed-icon {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, #f44336, #d32f2f);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 30px;
+    }
+
+    .failed-icon i {
+        font-size: 50px;
+        color: var(--white);
+    }
+
+    .failed-card h1 {
+        font-family: var(--font-heading);
+        font-size: 2rem;
+        color: var(--primary-dark);
+        margin-bottom: 16px;
+    }
+
+    .failed-card>p {
+        color: var(--text-muted);
+        margin-bottom: 30px;
+    }
+
+    .failed-reasons {
+        background: #FFF3F3;
+        padding: 24px;
+        border-radius: var(--radius-md);
+        margin-bottom: 30px;
+        text-align: left;
+    }
+
+    .failed-reasons h3 {
+        font-family: var(--font-heading);
+        font-size: 1rem;
+        color: var(--primary-dark);
+        margin-bottom: 16px;
+    }
+
+    .failed-reasons ul {
+        list-style: none;
+    }
+
+    .failed-reasons li {
+        padding: 8px 0;
+        color: var(--text-muted);
+        font-size: 14px;
+    }
+
+    .failed-reasons li i {
+        color: #f44336;
+        margin-right: 10px;
+    }
+
+    .failed-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+</style>
+{% endblock %}

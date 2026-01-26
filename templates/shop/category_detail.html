@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category.name }} - GiftWorld{% endblock %}
+
+{% block content %}
+<section class="category-page">
+    <div class="category-inner">
+        <div class="category-header">
+            <nav class="breadcrumb">
+                <a href="{% url 'shop:home' %}">Home</a>
+                <span>/</span>
+                <a href="{% url 'shop:shop' %}">Shop</a>
+                <span>/</span>
+                <span class="current">{{ category.name }}</span>
+            </nav>
+
+            <h1>{{ category.name }}</h1>
+            {% if category.description %}
+            <p>{{ category.description }}</p>
+            {% endif %}
+        </div>
+
+        <div class="products-grid">
+            {% for product in products %}
+            <a href="{% url 'shop:product_detail' product.slug %}" class="product-card">
+                {% if product.badge %}
+                <span class="product-badge">{{ product.get_badge_display }}</span>
+                {% endif %}
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                {% else %}
+                <img src="https://i.postimg.cc/L4Gr2CCR/product-1.jpg" alt="{{ product.name }}" class="product-image">
+                {% endif %}
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-price">₹{{ product.display_price }}</p>
+            </a>
+            {% empty %}
+            <div class="no-products">
+                <i class="fas fa-gift"></i>
+                <h3>No products in this category yet</h3>
+                <p>Check back soon or explore our other collections!</p>
+                <a href="{% url 'shop:shop' %}" class="btn btn-primary">Browse All Gifts</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .category-page {
+        padding: 40px 5%;
+        background: var(--cream);
+        min-height: 60vh;
+    }
+
+    .category-inner {
+        max-width: var(--container-max);
+        margin: 0 auto;
+    }
+
+    .category-header {
+        margin-bottom: 40px;
+    }
+
+    .breadcrumb {
+        padding: 20px 0;
+        font-size: 14px;
+        color: var(--text-muted);
+    }
+
+    .breadcrumb a {
+        color: var(--text-muted);
+    }
+
+    .breadcrumb a:hover {
+        color: var(--primary);
+    }
+
+    .breadcrumb span {
+        margin: 0 8px;
+    }
+
+    .breadcrumb .current {
+        color: var(--primary-dark);
+        font-weight: 500;
+    }
+
+    .category-header h1 {
+        font-family: var(--font-heading);
+        font-size: clamp(2rem, 4vw, 3rem);
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+    }
+
+    .category-header p {
+        color: var(--text-muted);
+        font-size: 1.1rem;
+    }
+
+    .no-products {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 80px 20px;
+        background: var(--white);
+        border-radius: var(--radius-lg);
+    }
+
+    .no-products i {
+        font-size: 4rem;
+        color: var(--primary-light);
+        margin-bottom: 20px;
+    }
+
+    .no-products h3 {
+        color: var(--primary-dark);
+        margin-bottom: 10px;
+    }
+
+    .no-products p {
+        color: var(--text-muted);
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}

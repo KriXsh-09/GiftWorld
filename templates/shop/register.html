@@ -1,0 +1,601 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register - GiftWorld{% endblock %}
+
+{% block content %}
+<section class="register-section">
+    <div class="register-container">
+        <!-- Left Side - Branding -->
+        <div class="register-branding">
+            <div class="branding-content">
+                <div class="brand-logo">
+                    <span class="logo-icon">🎁</span>
+                    <h1>GiftWorld</h1>
+                </div>
+                <h2>Join Our Gift Family</h2>
+                <p>Create an account to unlock exclusive offers, track orders, and find the perfect gift for every
+                    occasion.</p>
+
+                <div class="brand-features">
+                    <div class="feature-item">
+                        <i class="fas fa-gift"></i>
+                        <span>Curated Gift Collections</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-truck"></i>
+                        <span>Fast &amp; Free Delivery</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Secure Payments</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Gift Wrapping Available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Registration Form -->
+        <div class="register-form-wrapper">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2>Create Your Account</h2>
+                    <p>Fill in your details to get started</p>
+                </div>
+
+                {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    <i class="fas fa-info-circle"></i> {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %}
+
+                {% if not email_verified and not show_otp_input %}
+                <!-- Step 1: Enter Email -->
+                <div class="form-step" id="step1">
+                    <div class="step-header">
+                        <div class="step-number active">1</div>
+                        <span>Verify Email</span>
+                        <div class="step-line"></div>
+                        <div class="step-number">2</div>
+                        <span>Your Details</span>
+                    </div>
+
+                    <div class="email-verify-section">
+                        <div class="verify-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Verify Your Email Address</h3>
+                        <p>We'll send you a one-time password to verify your email</p>
+
+                        <form method="post" class="email-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="send_otp">
+                            <div class="form-group">
+                                <input type="email" name="email" class="form-input"
+                                    placeholder="Enter your email address" required>
+                            </div>
+                            <button type="submit" class="btn-send-otp">
+                                <i class="fas fa-paper-plane"></i> Send OTP
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if show_otp_input %}
+                <!-- Step 1.5: Enter OTP -->
+                <div class="form-step" id="step-otp">
+                    <div class="step-header">
+                        <div class="step-number active">1</div>
+                        <span>Verify Email</span>
+                        <div class="step-line"></div>
+                        <div class="step-number">2</div>
+                        <span>Your Details</span>
+                    </div>
+
+                    <div class="email-verify-section">
+                        <div class="verify-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>Enter Verification Code</h3>
+                        <p>We've sent a 6-digit OTP to <strong>{{ pending_email }}</strong></p>
+
+                        <form method="post" class="otp-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="verify_otp">
+                            <div class="form-group">
+                                <input type="text" name="otp" class="form-input otp-input"
+                                    placeholder="Enter 6-digit OTP" maxlength="6" pattern="[0-9]{6}" required>
+                            </div>
+                            <button type="submit" class="btn-verify-otp">
+                                <i class="fas fa-check-circle"></i> Verify OTP
+                            </button>
+                        </form>
+
+                        <div class="resend-section">
+                            <p>Didn't receive the code?</p>
+                            <form method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="send_otp">
+                                <input type="hidden" name="email" value="{{ pending_email }}">
+                                <button type="submit" class="btn-resend">Resend OTP</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if email_verified %}
+                <!-- Step 2: User Details -->
+                <form method="post" class="register-form" id="registerForm">
+                    {% csrf_token %}
+                    <div class="form-step" id="step2">
+                        <div class="step-header">
+                            <div class="step-number completed"><i class="fas fa-check"></i></div>
+                            <span>Verify Email</span>
+                            <div class="step-line completed"></div>
+                            <div class="step-number active">2</div>
+                            <span>Your Details</span>
+                        </div>
+
+                        <div class="verified-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>{{ verified_email }}</span>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                {{ form.first_name }}
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Username</label>
+                            {{ form.username }}
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" name="email" value="{{ verified_email }}" class="form-input" readonly>
+                        </div>
+
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Password</label>
+                                {{ form.password1 }}
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                {{ form.password2 }}
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-register">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </div>
+                </form>
+                {% endif %}
+
+                <div class="register-footer">
+                    <p>Already have an account? <a href="{% url 'shop:login' %}">Sign In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .register-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+
+    .register-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 100vh;
+    }
+
+    .register-branding {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .register-branding::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    }
+
+    .branding-content {
+        position: relative;
+        color: white;
+        max-width: 400px;
+    }
+
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .brand-logo .logo-icon {
+        font-size: 48px;
+    }
+
+    .brand-logo h1 {
+        font-size: 32px;
+        font-weight: 700;
+    }
+
+    .branding-content h2 {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        line-height: 1.2;
+    }
+
+    .branding-content>p {
+        font-size: 16px;
+        opacity: 0.9;
+        line-height: 1.6;
+        margin-bottom: 40px;
+    }
+
+    .brand-features {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+    }
+
+    .feature-item i {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .register-form-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        background: var(--cream);
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 480px;
+        background: white;
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+    .register-header h2 {
+        font-size: 28px;
+        color: var(--primary-dark);
+        margin-bottom: 8px;
+    }
+
+    .register-header p {
+        color: var(--text-muted);
+    }
+
+    .step-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-bottom: 32px;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        color: #999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .step-number.active {
+        background: var(--primary);
+        color: white;
+    }
+
+    .step-number.completed {
+        background: #28a745;
+        color: white;
+    }
+
+    .step-line {
+        width: 60px;
+        height: 3px;
+        background: #e0e0e0;
+        border-radius: 2px;
+    }
+
+    .step-line.completed {
+        background: #28a745;
+    }
+
+    .step-header span {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .email-verify-section {
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .verify-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, var(--primary-light), var(--primary));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+    }
+
+    .verify-icon i {
+        font-size: 36px;
+        color: white;
+    }
+
+    .email-verify-section h3 {
+        font-size: 20px;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+    }
+
+    .email-verify-section>p {
+        color: var(--text-muted);
+        margin-bottom: 24px;
+    }
+
+    .email-form,
+    .otp-form {
+        max-width: 320px;
+        margin: 0 auto;
+    }
+
+    .otp-input {
+        text-align: center;
+        font-size: 24px;
+        letter-spacing: 8px;
+        font-weight: 600;
+    }
+
+    .btn-send-otp,
+    .btn-verify-otp {
+        width: 100%;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        margin-top: 16px;
+    }
+
+    .btn-send-otp:hover,
+    .btn-verify-otp:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(169, 29, 58, 0.3);
+    }
+
+    .resend-section {
+        margin-top: 24px;
+        padding-top: 16px;
+        border-top: 1px solid #eee;
+    }
+
+    .resend-section p {
+        color: var(--text-muted);
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .btn-resend {
+        background: none;
+        border: none;
+        color: var(--primary);
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .btn-resend:hover {
+        color: var(--primary-dark);
+    }
+
+    .verified-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 20px;
+        background: #d4edda;
+        color: #155724;
+        border-radius: 30px;
+        margin-bottom: 24px;
+        font-weight: 500;
+    }
+
+    .verified-badge i {
+        font-size: 18px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-dark);
+        margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group .form-input {
+        width: 100%;
+        padding: 14px 16px;
+        border: 2px solid #e8e8e8;
+        border-radius: 12px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-group input:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(169, 29, 58, 0.1);
+        outline: none;
+    }
+
+    .form-group input[readonly] {
+        background: #f5f5f5;
+        cursor: not-allowed;
+    }
+
+    .btn-register {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(169, 29, 58, 0.3);
+    }
+
+    .register-footer {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 1px solid #eee;
+    }
+
+    .register-footer a {
+        color: var(--primary);
+        font-weight: 600;
+    }
+
+    .alert {
+        padding: 12px 16px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    @media (max-width: 992px) {
+        .register-container {
+            grid-template-columns: 1fr;
+        }
+
+        .register-branding {
+            display: none;
+        }
+
+        .register-form-wrapper {
+            padding: 20px;
+        }
+
+        .register-card {
+            padding: 30px 20px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

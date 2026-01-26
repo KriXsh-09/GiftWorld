@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Orders - GiftWorld{% endblock %}
+
+{% block content %}
+<section class="profile-section">
+    <div class="profile-container">
+        <!-- Sidebar -->
+        <div class="profile-sidebar">
+            <div class="profile-user-card">
+                {% if user.profile.profile_image %}
+                <img src="{{ user.profile.profile_image.url }}" alt="{{ user.get_full_name }}" class="profile-avatar">
+                {% else %}
+                <div class="profile-avatar-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+                {% endif %}
+                <h3>{{ user.get_full_name|default:user.username }}</h3>
+                <p>{{ user.email }}</p>
+            </div>
+
+            <nav class="profile-nav">
+                <a href="{% url 'shop:profile' %}" class="profile-nav-item">
+                    <i class="fas fa-user"></i> My Profile
+                </a>
+                <a href="{% url 'shop:orders' %}" class="profile-nav-item active">
+                    <i class="fas fa-box"></i> My Orders
+                </a>
+                <a href="{% url 'shop:cart' %}" class="profile-nav-item">
+                    <i class="fas fa-shopping-bag"></i> My Cart
+                </a>
+                <a href="{% url 'shop:logout' %}" class="profile-nav-item logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="profile-main">
+            <div class="profile-header">
+                <h1><i class="fas fa-box"></i> My Orders</h1>
+                <p>Track and manage your orders</p>
+            </div>
+
+            {% if orders %}
+            <div class="orders-grid">
+                {% for order in orders %}
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div>
+                            <h3>Order #{{ order.order_id }}</h3>
+                            <p class="order-date">{{ order.created_at|date:"d M, Y - h:i A" }}</p>
+                        </div>
+                        <span class="status-badge status-{{ order.status|lower }}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+
+                    <div class="order-card-items">
+                        {% for item in order.items.all %}
+                        <div class="order-item-row">
+                            <div class="order-item-info">
+                                <p class="order-item-name">{{ item.product_name }}</p>
+                                <p class="order-item-qty">Qty: {{ item.quantity }}</p>
+                            </div>
+                            <p class="order-item-price">₹{{ item.price }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="order-card-footer">
+                        <div class="order-total-section">
+                            <div class="order-total-row">
+                                <span>Subtotal:</span>
+                                <span>₹{{ order.subtotal }}</span>
+                            </div>
+                            <div class="order-total-row">
+                                <span>Shipping:</span>
+                                <span>₹{{ order.shipping_charge }}</span>
+                            </div>
+                            <div class="order-total-row total">
+                                <span>Total:</span>
+                                <span>₹{{ order.total }}</span>
+                            </div>
+                        </div>
+
+                        <div class="order-payment-status">
+                            <span class="payment-badge payment-{{ order.payment_status|lower }}">
+                                <i class="fas fa-credit-card"></i> {{ order.get_payment_status_display }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="order-card-actions">
+                        <a href="https://wa.me/{{ whatsapp_number|slice:'1:' }}?text=Hi%20GiftWorld!%20I%20need%20help%20with%20order%20{{ order.order_id }}"
+                            target="_blank" class="btn btn-outline btn-sm">
+                            <i class="fab fa-whatsapp"></i> Contact Support
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <h2>No Orders Yet</h2>
+                <p>Start shopping and your orders will appear here</p>
+                <a href="{% url 'shop:shop' %}" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag"></i> Start Shopping
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

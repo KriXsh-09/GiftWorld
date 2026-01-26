@@ -1,0 +1,228 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="{% block meta_description %}GiftWorld - Curated Gifts that Speak to the Soul. Find the perfect gift for every occasion.{% endblock %}">
+    <title>{% block title %}GiftWorld - Curated Gifts That Speak to the Soul{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- ===== HEADER ===== -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="{% url 'shop:home' %}" class="logo">
+                <span class="logo-icon">🎁</span>
+                <span>GiftWorld</span>
+            </a>
+
+            <nav class="nav">
+
+                <ul class="nav-links">
+                    <li><a href="{% url 'shop:home' %}"
+                            class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+                    </li>
+                    <li><a href="{% url 'shop:shop' %}"
+                            class="nav-link {% if request.resolver_match.url_name == 'shop' %}active{% endif %}">Shop</a>
+                    </li>
+                    <li><a href="{% url 'shop:about' %}"
+                            class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">About</a>
+                    </li>
+                    <li><a href="{% url 'shop:contact' %}"
+                            class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="mobile-nav-item"><a href="{% url 'shop:profile' %}" class="nav-link"><i
+                                class="fas fa-user"></i> My Profile</a></li>
+                    <li class="mobile-nav-item"><a href="{% url 'shop:orders' %}" class="nav-link"><i
+                                class="fas fa-box"></i> My Orders</a></li>
+                    <li class="mobile-nav-item"><a href="{% url 'shop:logout' %}" class="nav-link"><i
+                                class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    {% else %}
+                    <li class="mobile-nav-item"><a href="{% url 'shop:login' %}" class="nav-link"><i
+                                class="fas fa-sign-in-alt"></i> Login</a></li>
+                    <li class="mobile-nav-item"><a href="{% url 'shop:register' %}" class="nav-link"><i
+                                class="fas fa-user-plus"></i> Register</a></li>
+                    {% endif %}
+                    <li class="mobile-nav-item"><a href="{% url 'shop:cart' %}" class="nav-link"><i
+                                class="fas fa-shopping-bag"></i> Cart ({{ cart_count }})</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="{% url 'shop:cart' %}" class="header-icon cart-badge desktop-cart-icon">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span>{{ cart_count }}</span>
+                </a>
+
+                <!-- Profile Dropdown (Desktop) -->
+                <div class="profile-dropdown desktop-profile-icon">
+                    <button class="header-icon profile-trigger">
+                        <i class="fas fa-user"></i>
+                    </button>
+                    <div class="profile-menu">
+                        {% if user.is_authenticated %}
+                        <div class="profile-menu-header">
+                            <i class="fas fa-user-circle"></i>
+                            <div>
+                                <p class="profile-menu-name">{{ user.get_full_name|default:user.username }}</p>
+                                <p class="profile-menu-email">{{ user.email }}</p>
+                            </div>
+                        </div>
+                        <div class="profile-menu-divider"></div>
+                        <a href="{% url 'shop:profile' %}" class="profile-menu-item">
+                            <i class="fas fa-user"></i> My Profile
+                        </a>
+                        <a href="{% url 'shop:orders' %}" class="profile-menu-item">
+                            <i class="fas fa-box"></i> My Orders
+                        </a>
+                        <div class="profile-menu-divider"></div>
+                        <a href="{% url 'shop:logout' %}" class="profile-menu-item">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                        {% else %}
+                        <a href="{% url 'shop:login' %}" class="profile-menu-item">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                        <a href="{% url 'shop:register' %}" class="profile-menu-item">
+                            <i class="fas fa-user-plus"></i> Register
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MESSAGES ===== -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+            <button class="alert-close">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="footer-main">
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <a href="{% url 'shop:home' %}" class="logo">
+                        <span class="logo-icon">🎁</span>
+                        <span>GiftWorld</span>
+                    </a>
+                    <p>Crafting memories through carefully curated gifts since 2020. We believe every gift tells a
+                        story.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-pinterest"></i></a>
+                    </div>
+                    <div class="rating">
+                        <span class="rating-stars">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </span>
+                        <span class="rating-text">5.0</span>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Shop</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'shop:shop' %}" class="footer-link">All Gifts</a></li>
+                        <li><a href="{% url 'shop:shop' %}?badge=BESTSELLER" class="footer-link">Bestsellers</a></li>
+                        <li><a href="{% url 'shop:shop' %}?badge=NEW" class="footer-link">New Arrivals</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'shop:contact' %}" class="footer-link">Contact Us</a></li>
+                        <li><a href="{% url 'shop:about' %}" class="footer-link">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <span>GiftWorld Chitravani Road Bhatta Bazar<br>Purnea, Bihar 854301</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <span>{{ whatsapp_number }}</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <span>giftworldonlineofficial@gmail.com</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scrolling Marquee -->
+        <div class="marquee-container">
+            <div class="marquee">
+                <div class="marquee-content">
+                    <span class="marquee-item">VALENTINE</span>
+                    <span class="marquee-item">ANNIVERSARY</span>
+                    <span class="marquee-item">CHRISTMAS</span>
+                    <span class="marquee-item">BIRTHDAY</span>
+                    <span class="marquee-item">WEDDING</span>
+                    <span class="marquee-item">BABY SHOWER</span>
+                    <span class="marquee-item">GRADUATION</span>
+                    <span class="marquee-item">MOTHER'S DAY</span>
+                </div>
+                <div class="marquee-content">
+                    <span class="marquee-item">VALENTINE</span>
+                    <span class="marquee-item">ANNIVERSARY</span>
+                    <span class="marquee-item">CHRISTMAS</span>
+                    <span class="marquee-item">BIRTHDAY</span>
+                    <span class="marquee-item">WEDDING</span>
+                    <span class="marquee-item">BABY SHOWER</span>
+                    <span class="marquee-item">GRADUATION</span>
+                    <span class="marquee-item">MOTHER'S DAY</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/{{ whatsapp_number|slice:'1:' }}?text=Hi%20GiftWorld!%20I%20would%20like%20to%20enquire%20about%20your%20gifts."
+        target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

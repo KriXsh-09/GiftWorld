@@ -155,3 +155,26 @@ document.addEventListener('DOMContentLoaded', () => {
     
     console.log('GiftWorld website loaded successfully! 🎁');
 });
+
+    // Profile Dropdown Toggle
+    const profileTrigger = document.querySelector('.profile-trigger');
+    const profileMenu = document.querySelector('.profile-menu');
+    
+    if (profileTrigger && profileMenu) {
+        profileTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.style.opacity = profileMenu.style.opacity === '1' ? '0' : '1';
+            profileMenu.style.visibility = profileMenu.style.visibility === 'visible' ? 'hidden' : 'visible';
+            profileMenu.style.transform = profileMenu.style.transform === 'translateY(0px)' ? 'translateY(-10px)' : 'translateY(0px)';
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!profileTrigger.contains(e.target) && !profileMenu.contains(e.target)) {
+                profileMenu.style.opacity = '0';
+                profileMenu.style.visibility = 'hidden';
+                profileMenu.style.transform = 'translateY(-10px)';
+            }
+        });
+    }
+
