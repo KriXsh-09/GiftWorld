@@ -31,6 +31,9 @@
                     <li><a href="{% url 'shop:shop' %}"
                             class="nav-link {% if request.resolver_match.url_name == 'shop' %}active{% endif %}">Shop</a>
                     </li>
+                    <li><a href="{% url 'shop:custom_statues' %}"
+                            class="nav-link {% if request.resolver_match.url_name == 'custom_statues' %}active{% endif %}">3D Statues</a>
+                    </li>
                     <li><a href="{% url 'shop:about' %}"
                             class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}">About</a>
                     </li>
@@ -157,6 +160,7 @@
                     <h4>Shop</h4>
                     <ul class="footer-links">
                         <li><a href="{% url 'shop:shop' %}" class="footer-link">All Gifts</a></li>
+                        <li><a href="{% url 'shop:custom_statues' %}" class="footer-link">3D Statues</a></li>
                         <li><a href="{% url 'shop:shop' %}?badge=BESTSELLER" class="footer-link">Bestsellers</a></li>
                         <li><a href="{% url 'shop:shop' %}?badge=NEW" class="footer-link">New Arrivals</a></li>
                     </ul>

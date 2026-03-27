@@ -6,8 +6,8 @@ from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .models import Category, Product, Testimonial, ContactEnquiry, Customer, Order, OrderItem
-from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm, ProductForm, CategoryForm
+from .models import Category, Product, Testimonial, ContactEnquiry, Customer, Order, OrderItem, StatueOrder
+from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm, ProductForm, CategoryForm, StatueOrderForm
 from .utils import generate_otp, send_verification_email, verify_email_otp
 from datetime import datetime, timedelta
 import json
@@ -599,4 +599,27 @@ def admin_add_category(request):
     }
     return render(request, 'shop/admin/category_form.html', context)
 
+
+# ===== CUSTOM 3D STATUES =====
+def custom_statues(request):
+    """Custom 3D Printed Statues page with enquiry form"""
+    if request.method == 'POST':
+        form = StatueOrderForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                'Thank you for your statue enquiry! We will review your request and get back to you with a quote within 24 hours.'
+            )
+            return redirect('shop:custom_statues')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+    else:
+        form = StatueOrderForm()
+
+    context = {
+        'form': form,
+        'whatsapp_number': settings.WHATSAPP_NUMBER,
+    }
+    return render(request, 'shop/custom_statues.html', context)
 

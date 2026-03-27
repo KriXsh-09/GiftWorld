@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product, ProductImage, Customer, Order, OrderItem, Testimonial, ContactEnquiry
+from .models import Category, Product, ProductImage, Customer, Order, OrderItem, Testimonial, ContactEnquiry, StatueOrder
 
 
 @admin.register(Category)
@@ -61,3 +61,13 @@ class ContactEnquiryAdmin(admin.ModelAdmin):
     list_filter = ['is_read', 'created_at']
     search_fields = ['name', 'email', 'subject', 'message']
     list_editable = ['is_read']
+
+
+@admin.register(StatueOrder)
+class StatueOrderAdmin(admin.ModelAdmin):
+    list_display = ['customer_name', 'email', 'phone', 'size', 'material', 'status', 'quoted_price', 'created_at']
+    list_filter = ['status', 'size', 'material', 'created_at']
+    search_fields = ['customer_name', 'email', 'phone', 'color_preference']
+    list_editable = ['status', 'quoted_price']
+    readonly_fields = ['created_at', 'updated_at']
+

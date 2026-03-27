@@ -201,3 +201,50 @@ class ContactEnquiry(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.subject}"
+
+
+class StatueOrder(models.Model):
+    """Custom 3D Printed Statue Orders / Enquiries"""
+    SIZE_CHOICES = [
+        ('SMALL', 'Small (4 inches)'),
+        ('MEDIUM', 'Medium (8 inches)'),
+        ('LARGE', 'Large (12 inches)'),
+        ('XL', 'Extra Large (18 inches)'),
+    ]
+
+    MATERIAL_CHOICES = [
+        ('PLA', 'PLA Plastic'),
+        ('RESIN', 'Resin'),
+        ('SANDSTONE', 'Sandstone'),
+    ]
+
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending Review'),
+        ('QUOTED', 'Price Quoted'),
+        ('CONFIRMED', 'Confirmed'),
+        ('PRINTING', 'Printing'),
+        ('SHIPPED', 'Shipped'),
+        ('DELIVERED', 'Delivered'),
+        ('CANCELLED', 'Cancelled'),
+    ]
+
+    customer_name = models.CharField(max_length=200)
+    email = models.EmailField()
+    phone = models.CharField(max_length=15)
+    reference_image = models.ImageField(upload_to='statue_orders/')
+    size = models.CharField(max_length=10, choices=SIZE_CHOICES, default='MEDIUM')
+    material = models.CharField(max_length=15, choices=MATERIAL_CHOICES, default='PLA')
+    color_preference = models.CharField(max_length=100, blank=True, help_text='Preferred color or finish')
+    special_instructions = models.TextField(blank=True, help_text='Any extra details or instructions')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    quoted_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = '3D Statue Order'
+        verbose_name_plural = '3D Statue Orders'
+
+    def __str__(self):
+        return f"{self.customer_name} - {self.get_size_display()} {self.get_material_display()} ({self.status})"

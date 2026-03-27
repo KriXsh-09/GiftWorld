@@ -172,7 +172,7 @@ class UserProfileForm(forms.ModelForm):
         return profile
 
 
-from .models import Product, Category
+from .models import Product, Category, StatueOrder
 
 
 class CategoryForm(forms.ModelForm):
@@ -252,6 +252,57 @@ class ProductForm(forms.ModelForm):
             'stock': forms.NumberInput(attrs={
                 'class': 'admin-input',
                 'placeholder': 'Stock Quantity'
+            }),
+        }
+
+
+class StatueOrderForm(forms.ModelForm):
+    """Form for custom 3D printed statue enquiries"""
+    class Meta:
+        model = StatueOrder
+        fields = [
+            'customer_name', 'email', 'phone', 'reference_image',
+            'size', 'material', 'color_preference', 'special_instructions'
+        ]
+        widgets = {
+            'customer_name': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Your Full Name',
+                'id': 'statue-name'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Email Address',
+                'id': 'statue-email'
+            }),
+            'phone': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'WhatsApp / Phone Number',
+                'id': 'statue-phone'
+            }),
+            'reference_image': forms.FileInput(attrs={
+                'class': 'form-input-file',
+                'accept': 'image/*',
+                'id': 'statue-image'
+            }),
+            'size': forms.Select(attrs={
+                'class': 'form-input',
+                'id': 'statue-size'
+            }),
+            'material': forms.Select(attrs={
+                'class': 'form-input',
+                'id': 'statue-material'
+            }),
+            'color_preference': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'e.g. Gold finish, Natural stone, Full color',
+                'id': 'statue-color'
+            }),
+            'special_instructions': forms.Textarea(attrs={
+                'class': 'form-input',
+                'placeholder': 'Tell us about your vision — pose, base style, inscription, etc.',
+                'rows': 4,
+                'id': 'statue-instructions'
             }),
         }
 

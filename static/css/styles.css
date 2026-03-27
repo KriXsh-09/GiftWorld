@@ -2285,3 +2285,34 @@ a.featured-product-card:hover .featured-product-name {
     }
 }
 
+/* ===== 3D STATUES PROMO (Home Page) ===== */
+.statue-promo {
+    padding: 60px 5%;
+    background: linear-gradient(135deg, #4a0a1f, #8B1538);
+    text-align: center;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.statue-promo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(212, 168, 83, 0.12), transparent 70%);
+}
+.statue-promo-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.statue-promo h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+.statue-promo p {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 24px;
+    font-size: 1rem;
+}
